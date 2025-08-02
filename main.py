@@ -4,10 +4,11 @@ from dotenv import load_dotenv
 
 from google import genai
 from google.genai import types
-from functions.get_files_info import schema_get_files_info, get_files_info
+from functions.get_files_info import schema_get_files_info
 from functions.get_file_content import schema_get_file_content
 from functions.write_file import schema_write_file
 from functions.run_python import schema_run_python_file
+from functions.call_function import call_function
 
 import config
 
@@ -60,10 +61,15 @@ def main():
 )
     
     print("Response:")
-    #print(response.text)
     print(f"Calling function: {response.function_calls[0].name}({response.function_calls[0].args})")
 
+    try:
+        function_call_result = call_function(response.function_calls[0], verbose_flag)
+    except Exception as e:
+        print(f"Error calling exception:, {e}")
+
     if verbose_flag == True:
+        print(f"-> {function_call_result.parts[0].function_response.response}")
         print("Prompt tokens:", response.usage_metadata.prompt_token_count)
         print("Response tokens:", response.usage_metadata.candidates_token_count)
 
