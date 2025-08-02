@@ -1,6 +1,7 @@
 import os
 from google.genai import types
 
+import config
 from functions.get_files_info import get_files_info
 from functions.get_file_content import get_file_content
 from functions.write_file import write_file
@@ -12,7 +13,7 @@ def call_function(function_call_part, verbose=False):
     else:
         print(f" - Calling function: {function_call_part.name}")
     
-    working_directory = "./calculator"
+    working_directory = config.WORKING_DIR
     function_name = function_call_part.name
     function_args = function_call_part.args
 
